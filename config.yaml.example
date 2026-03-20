@@ -1,0 +1,10 @@
+# SiliconFlow API 配置
+SILICONFLOW_API_KEY: "your-api-key-here"
+SILICONFLOW_BASE_URL: "https://api.siliconflow.cn/v1"
+
+# 模型配置
+DEFAULT_MODEL: "deepseek-ai/DeepSeek-V3"
+
+# 思考能力配置
+ENABLE_THINKING: true
+THINKING_BUDGET: 4096

@@ -1,0 +1,86 @@
+[
+  {
+    "customer_id": "1001",
+    "service_type": "broadband",
+    "status": "approved",
+    "progress_detail": "已审核，待安装",
+    "estimated_completion": "2024-02-15"
+  },
+  {
+    "customer_id": "1001",
+    "service_type": "mobile",
+    "status": "completed",
+    "progress_detail": "已完成",
+    "estimated_completion": "2024-01-10"
+  },
+  {
+    "customer_id": "1002",
+    "service_type": "mobile",
+    "status": "completed",
+    "progress_detail": "已完成",
+    "estimated_completion": "2024-01-20"
+  },
+  {
+    "customer_id": "1002",
+    "service_type": "broadband",
+    "status": "installing",
+    "progress_detail": "安装中",
+    "estimated_completion": "2024-02-20"
+  },
+  {
+    "customer_id": "1003",
+    "service_type": "broadband",
+    "status": "pending",
+    "progress_detail": "待审核",
+    "estimated_completion": "2024-03-01"
+  },
+  {
+    "customer_id": "1004",
+    "service_type": "mobile",
+    "status": "approved",
+    "progress_detail": "已审核，待激活",
+    "estimated_completion": "2024-02-18"
+  },
+  {
+    "customer_id": "1005",
+    "service_type": "broadband",
+    "status": "completed",
+    "progress_detail": "已完成",
+    "estimated_completion": "2024-01-25"
+  },
+  {
+    "customer_id": "1006",
+    "service_type": "mobile",
+    "status": "pending",
+    "progress_detail": "待审核",
+    "estimated_completion": "2024-03-05"
+  },
+  {
+    "customer_id": "1007",
+    "service_type": "broadband",
+    "status": "installing",
+    "progress_detail": "安装中，预计明天完成",
+    "estimated_completion": "2024-02-16"
+  },
+  {
+    "customer_id": "1008",
+    "service_type": "mobile",
+    "status": "completed",
+    "progress_detail": "已完成",
+    "estimated_completion": "2024-01-30"
+  },
+  {
+    "customer_id": "1009",
+    "service_type": "broadband",
+    "status": "approved",
+    "progress_detail": "已审核，等待安装排期",
+    "estimated_completion": "2024-02-25"
+  },
+  {
+    "customer_id": "1010",
+    "service_type": "mobile",
+    "status": "pending",
+    "progress_detail": "待审核",
+    "estimated_completion": "2024-03-10"
+  }
+]

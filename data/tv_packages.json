@@ -1,0 +1,98 @@
+[
+  {
+    "product_id": "TV001",
+    "name": "VIP 尊享电视套餐",
+    "price": 299.0,
+    "cities": ["北京", "上海", "广州", "深圳", "杭州"],
+    "customer_levels": ["VIP"],
+    "description": "包含300+高清频道，支持4K播放，专属VIP客服"
+  },
+  {
+    "product_id": "TV002",
+    "name": "VIP 豪华电视套餐",
+    "price": 399.0,
+    "cities": ["北京", "上海", "成都", "武汉", "西安"],
+    "customer_levels": ["VIP"],
+    "description": "包含500+高清频道，支持8K播放，专属VIP客服，赠送影视会员"
+  },
+  {
+    "product_id": "TV003",
+    "name": "VIP 至尊电视套餐",
+    "price": 499.0,
+    "cities": ["北京", "上海", "广州", "深圳", "南京", "重庆"],
+    "customer_levels": ["VIP"],
+    "description": "包含800+高清频道，支持8K播放，专属VIP客服，赠送全平台影视会员"
+  },
+  {
+    "product_id": "TV004",
+    "name": "标准电视套餐",
+    "price": 99.0,
+    "cities": ["北京", "上海", "广州", "深圳", "杭州", "成都", "武汉", "西安", "南京", "重庆"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含100+高清频道，满足日常观看需求"
+  },
+  {
+    "product_id": "TV005",
+    "name": "经济电视套餐",
+    "price": 59.0,
+    "cities": ["北京", "上海", "广州", "深圳", "杭州", "成都", "武汉", "西安", "南京", "重庆"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含50+高清频道，经济实惠"
+  },
+  {
+    "product_id": "TV006",
+    "name": "家庭电视套餐",
+    "price": 129.0,
+    "cities": ["北京", "上海", "广州", "深圳", "杭州"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含150+高清频道，适合家庭观看"
+  },
+  {
+    "product_id": "TV007",
+    "name": "体育电视套餐",
+    "price": 159.0,
+    "cities": ["北京", "上海", "成都", "武汉", "西安", "南京"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含120+高清频道，专注体育赛事直播"
+  },
+  {
+    "product_id": "TV008",
+    "name": "影视电视套餐",
+    "price": 149.0,
+    "cities": ["广州", "深圳", "杭州", "成都", "重庆"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含130+高清频道，海量影视资源"
+  },
+  {
+    "product_id": "TV009",
+    "name": "少儿电视套餐",
+    "price": 89.0,
+    "cities": ["北京", "上海", "广州", "深圳", "杭州", "成都", "武汉", "西安", "南京", "重庆"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含80+高清频道，专为儿童设计，绿色健康内容"
+  },
+  {
+    "product_id": "TV010",
+    "name": "新闻电视套餐",
+    "price": 79.0,
+    "cities": ["北京", "上海", "广州", "深圳", "杭州", "成都", "武汉", "西安", "南京", "重庆"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含60+高清频道，聚焦新闻资讯"
+  },
+  {
+    "product_id": "TV011",
+    "name": "VIP 精选电视套餐",
+    "price": 249.0,
+    "cities": ["北京", "上海", "广州", "深圳", "杭州", "成都"],
+    "customer_levels": ["VIP"],
+    "description": "包含200+高清频道，支持4K播放，专属VIP客服"
+  },
+  {
+    "product_id": "TV012",
+    "name": "综合电视套餐",
+    "price": 119.0,
+    "cities": ["武汉", "西安", "南京", "重庆"],
+    "customer_levels": ["VIP", "普通"],
+    "description": "包含110+高清频道，综合类节目丰富"
+  }
+]
