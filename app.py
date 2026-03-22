@@ -8,6 +8,7 @@ from langchain_siliconflow import ChatSiliconFlow
 from master_agent import create_master_agent
 from subagents.customer_query_agent import customer_query_agent
 from subagents.process_query_agent import process_query_agent
+from subagents.product_recommendation_subagent import product_recommendation_subagent
 from prompts.master_agent_prompt import MASTER_AGENT_SYSTEM_PROMPT
 
 
@@ -47,7 +48,7 @@ def main():
     agent = create_master_agent(
         model=model,
         tools=[],
-        subagents=[customer_query_agent, process_query_agent],
+        subagents=[customer_query_agent, process_query_agent, product_recommendation_subagent],
         system_prompt=MASTER_AGENT_SYSTEM_PROMPT,
         memory_files=["memories/LTM.md"],
     )
