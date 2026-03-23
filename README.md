@@ -1,5 +1,5 @@
 启动方式：
-python app_hitl.py 
+python app.py 
 
 
 todo-list:
