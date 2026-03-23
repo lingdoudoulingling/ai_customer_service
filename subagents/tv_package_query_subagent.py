@@ -118,7 +118,7 @@ def build_tv_package_query_graph():
     graph_builder.add_edge("format_response", END)
     return graph_builder.compile()
 
-
+# "runnable"传编译后的图即可，虽然也可以接受普通函数
 tv_package_query_subagent: CompiledSubAgent = {
     "name": "tv-package-query",
     "description": "查询电视套餐。输入必须包含地区和客户级别（VIP/普通），返回该地区可办理的套餐列表。"
