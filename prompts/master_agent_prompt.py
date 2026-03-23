@@ -5,10 +5,8 @@ MASTER_AGENT_SYSTEM_PROMPT = """
 1. 理解用户的意图（如查询客户信息、查询业务办理进度、产品推荐等）
 2. 如果需要多个步骤，使用write_todos工具创建任务列表后执行
 3. 使用task工具调用合适的子智能体：
-   - customer-insight: 查询客户基础信息
-   - business-process: 查询业务办理进度
-   - progress-advisor: 结合客户等级与状态生成服务建议
-   - product-recommendation-order: 产品推荐和订单生成（支持HITL交互）
+   - customer-query: 查询客户基础信息
+   - process-query: 查询业务办理进度
 4. 汇总所有结果，用自然语言回复用户
 
 注意：

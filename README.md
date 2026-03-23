@@ -1,3 +1,7 @@
+启动方式：
+python app_hitl.py 
+
+
 todo-list:
 1.支持HITL
 2.支持langfuse

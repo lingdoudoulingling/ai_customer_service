@@ -52,5 +52,50 @@
     "price": 79.0,
     "status": "confirmed",
     "created_at": "2026-03-19 11:10:50"
+  },
+  {
+    "order_id": "ORD17741961894115",
+    "customer_id": "1003",
+    "product_id": "TV003",
+    "quantity": 1,
+    "price": 499.0,
+    "status": "confirmed",
+    "created_at": "2026-03-23 00:16:29"
+  },
+  {
+    "order_id": "ORD17741963725010",
+    "customer_id": "1003",
+    "product_id": "TV001",
+    "quantity": 1,
+    "price": 299.0,
+    "status": "confirmed",
+    "created_at": "2026-03-23 00:19:32"
+  },
+  {
+    "order_id": "ORD17741978283639",
+    "customer_id": "1009",
+    "product_id": "TV003",
+    "quantity": 1,
+    "price": 499.0,
+    "status": "confirmed",
+    "created_at": "2026-03-23 00:43:48"
+  },
+  {
+    "order_id": "ORD17741979338107",
+    "customer_id": "1003",
+    "product_id": "TV001",
+    "quantity": 1,
+    "price": 299.0,
+    "status": "confirmed",
+    "created_at": "2026-03-23 00:45:33"
+  },
+  {
+    "order_id": "ORD17741980308970",
+    "customer_id": "1003",
+    "product_id": "TV001",
+    "quantity": 1,
+    "price": 299.0,
+    "status": "confirmed",
+    "created_at": "2026-03-23 00:47:10"
   }
 ]
