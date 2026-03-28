@@ -5,6 +5,12 @@ SILICONFLOW_BASE_URL: "https://api.siliconflow.cn/v1"
 # 模型配置
 DEFAULT_MODEL: "deepseek-ai/DeepSeek-V3"
 
+# 是否在控制台里流式打印回复
+STREAM_OUTPUT: true
+
+# 是否输出思考内容
+SHOW_REASONING: true
+
 # 思考能力配置
 ENABLE_THINKING: true
 THINKING_BUDGET: 4096

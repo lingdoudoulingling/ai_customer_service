@@ -6,10 +6,10 @@ import yaml
 from langchain_siliconflow import ChatSiliconFlow
 
 from master_agent import create_master_agent
+from prompts.master_agent_prompt import MASTER_AGENT_SYSTEM_PROMPT
 from subagents.customer_query_agent import customer_query_agent
 from subagents.process_query_agent import process_query_agent
 from subagents.tv_package_query_subagent import tv_package_query_subagent
-from prompts.master_agent_prompt import MASTER_AGENT_SYSTEM_PROMPT
 
 
 def load_config(config_path: str = "config.yaml") -> dict:
@@ -27,6 +27,7 @@ def load_config(config_path: str = "config.yaml") -> dict:
 
     return cfg
 
+
 def build_model(cfg: dict) -> ChatSiliconFlow:
     return ChatSiliconFlow(
         model=cfg["DEFAULT_MODEL"],
@@ -38,6 +39,69 @@ def build_model(cfg: dict) -> ChatSiliconFlow:
             "thinking_budget": int(cfg.get("THINKING_BUDGET", 4096)),
         },
     )
+
+
+def stream_agent_response(
+    agent,
+    user_input: str,
+    thread_id: str,
+    show_reasoning: bool = True,
+) -> None:
+    reasoning_started = False
+    reply_parts: list[str] = []
+
+    for chunk in agent.stream(
+        {"messages": [{"role": "user", "content": user_input}]},
+        config={"configurable": {"thread_id": thread_id}},
+        stream_mode="messages",
+    ):
+        if not isinstance(chunk, tuple) or len(chunk) != 2:
+            continue
+
+        message, _metadata = chunk
+        if not type(message).__name__.startswith("AIMessage"):
+            continue
+
+        reasoning = getattr(message, "additional_kwargs", {}).get("reasoning_content")
+        if show_reasoning and reasoning:
+            reasoning = str(reasoning)
+            if not reasoning_started:
+                reasoning = reasoning.lstrip("\r\n")
+                if reasoning:
+                    print("思考：", end="", flush=True)
+                    reasoning_started = True
+            if reasoning:
+                print(reasoning, end="", flush=True)
+
+        text = str(getattr(message, "text", ""))
+        if text:
+            reply_parts.append(text)
+
+    if show_reasoning and reasoning_started:
+        print()
+
+    reply_text = "".join(reply_parts).lstrip("\r\n")
+    if reply_text:
+        print(f"助手：{reply_text}")
+
+
+def invoke_agent_once(
+    agent,
+    user_input: str,
+    thread_id: str,
+    show_reasoning: bool = True,
+) -> None:
+    result = agent.invoke(
+        {"messages": [{"role": "user", "content": user_input}]},
+        config={"configurable": {"thread_id": thread_id}},
+    )
+
+    last_msg = result["messages"][-1]
+    print(f"助手：{last_msg.content}")
+
+    reasoning = getattr(last_msg, "additional_kwargs", {}).get("reasoning_content")
+    if show_reasoning and reasoning:
+        print(f"思考：{reasoning}")
 
 
 def main():
@@ -70,17 +134,12 @@ def main():
         if not user_input:
             continue
 
-        result = agent.invoke(
-            {"messages": [{"role": "user", "content": user_input}]},
-            config={"configurable": {"thread_id": thread_id}},
-        )
+        show_reasoning = bool(cfg.get("SHOW_REASONING", True))
 
-        last_msg = result["messages"][-1]
-        print(f"助手：{last_msg.content}")
-
-        reasoning = getattr(last_msg, "additional_kwargs", {}).get("reasoning_content")
-        if reasoning:
-            print(f"思考：{reasoning}")
+        if cfg.get("STREAM_OUTPUT", True):
+            stream_agent_response(agent, user_input, thread_id, show_reasoning=show_reasoning)
+        else:
+            invoke_agent_once(agent, user_input, thread_id, show_reasoning=show_reasoning)
 
 
 if __name__ == "__main__":
