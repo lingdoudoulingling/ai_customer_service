@@ -53,5 +53,16 @@
     "diagnosis_record": "资源编码500135100000000013123839已完成内验但资源系统状态异常诊断记录：\n- 问题现象：资源已完成内验但资源系统仍显示\"在建\"状态\n- 关键证据：\n  * 资源代码：500135100000000013123839\n  * 公共库状态：INNER_ACCEPTANCE_PASSED（已通过内验）但forwarded_to_resource_system=false（未转发）\n  * 资源系统状态：在建\n  * 接收日志：资源系统未收到INNER_ACCEPTANCE类型报文，matched_records_count=0\n- 根本原因：公共库内验完成后，内验报文（INNER_ACCEPTANCE）未成功推送到资源系统\n- 影响范围：资源状态数据不一致，影响业务进展\n- 建议处理：检查公共库到资源系统的报文推送通道，验证网络连接和传输状态",
     "status": "submitted",
     "submitted_at": "2026-03-30 16:14:07"
+  },
+  {
+    "ticket_id": "TICKET-CCBA5FFB",
+    "ticket_title": "铁塔资源诊断工单 - 利旧资源查找异常，需修复PMS推送通道",
+    "ticket_body": "问题现象：资产编码A00002493300作为利旧资产，在资源系统中无法正常查找对应资源，影响项目资源调配。\n\n当前判断：PMS系统与资源系统数据同步异常，利旧流程推送失败，导致资源绑定状态异常。\n\n请支撑团队根据诊断记录检查PMS推送接口状态并处理。",
+    "target_team": "资源系统支撑",
+    "urgency": "medium",
+    "submission_reason": "诊断已完成，建议人工处理解决PMS推送通道问题",
+    "diagnosis_record": "资产编码A00002493300的利旧资源查找异常问题诊断记录：\n- 问题现象：无法在资源系统中找到利旧资产A00002493300对应的资源\n- 关键参数：asset_code=A00002493300, resource_code=500135100000000013125835, pms_project_code=PMS202603260002\n- 关键证据：\n  * 资源系统中资产状态正常但在网，绑定状态为unbound\n  * 资源变更履历显示在2026-03-26 09:30:00执行了asset_unbind操作\n  * PMS系统有发起利旧流程记录(reuse_flow_started=true)，但pushed_to_resource_system=false\n  * 公共库未验也未转发到资源系统\n- 根本原因：PMS系统虽有发起利旧流程的记录，但未成功将报文推送到资源系统\n- 影响范围：利旧资源无法在其他项目中正常流转使用\n- 建议处理：检查PMS系统向资源系统的推送接口服务状态，重新发起利旧流程推送",
+    "status": "submitted",
+    "submitted_at": "2026-03-30 17:01:51"
   }
 ]
