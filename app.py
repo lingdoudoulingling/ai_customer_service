@@ -4,12 +4,15 @@ from pathlib import Path
 
 import yaml
 from langchain_siliconflow import ChatSiliconFlow
+from langgraph.types import Command
 
 from master_agent import create_master_agent
 from prompts.master_agent_prompt import MASTER_AGENT_SYSTEM_PROMPT
 from subagents.customer_query_agent import customer_query_agent
 from subagents.process_query_agent import process_query_agent
+from subagents.sop_diagnosis_agent import sop_diagnosis_agent
 from subagents.tv_package_query_subagent import tv_package_query_subagent
+from tools.ticket_tools import build_manual_ticket_draft, submit_manual_ticket
 
 
 def load_config(config_path: str = "config.yaml") -> dict:
@@ -33,7 +36,6 @@ def build_model(cfg: dict) -> ChatSiliconFlow:
         model=cfg["DEFAULT_MODEL"],
         api_key=cfg["SILICONFLOW_API_KEY"],
         base_url=cfg["SILICONFLOW_BASE_URL"],
-        # SiliconFlow 专属参数，放这里透传
         extra_body={
             "enable_thinking": bool(cfg.get("ENABLE_THINKING", True)),
             "thinking_budget": int(cfg.get("THINKING_BUDGET", 4096)),
@@ -41,48 +43,43 @@ def build_model(cfg: dict) -> ChatSiliconFlow:
     )
 
 
-def stream_agent_response(
-    agent,
-    user_input: str,
-    thread_id: str,
-    show_reasoning: bool = True,
-) -> None:
-    reasoning_started = False
-    reply_parts: list[str] = []
+def _print_last_message(result_value: dict, show_reasoning: bool = True) -> None:
+    last_msg = result_value["messages"][-1]
+    print(f"助手：{last_msg.content}")
 
-    for chunk in agent.stream(
-        {"messages": [{"role": "user", "content": user_input}]},
-        config={"configurable": {"thread_id": thread_id}},
-        stream_mode="messages",
-    ):
-        if not isinstance(chunk, tuple) or len(chunk) != 2:
-            continue
+    reasoning = getattr(last_msg, "additional_kwargs", {}).get("reasoning_content")
+    if show_reasoning and reasoning:
+        print(f"思考：{reasoning}")
 
-        message, _metadata = chunk
-        if not type(message).__name__.startswith("AIMessage"):
-            continue
 
-        reasoning = getattr(message, "additional_kwargs", {}).get("reasoning_content")
-        if show_reasoning and reasoning:
-            reasoning = str(reasoning)
-            if not reasoning_started:
-                reasoning = reasoning.lstrip("\r\n")
-                if reasoning:
-                    print("思考：", end="", flush=True)
-                    reasoning_started = True
-            if reasoning:
-                print(reasoning, end="", flush=True)
+def _prompt_hitl_decisions(interrupt_value: dict) -> list[dict]:
+    action_requests = interrupt_value.get("action_requests", [])
+    review_configs = interrupt_value.get("review_configs", [])
+    decisions: list[dict] = []
 
-        text = str(getattr(message, "text", ""))
-        if text:
-            reply_parts.append(text)
+    for idx, action in enumerate(action_requests):
+        review = review_configs[idx] if idx < len(review_configs) else {}
+        print("\n【人工审批】")
+        print(f"工具：{action.get('name')}")
+        print(f"参数：{action.get('args')}")
+        if review.get("description"):
+            print(f"说明：{review['description']}")
 
-    if show_reasoning and reasoning_started:
-        print()
+        while True:
+            decision = input("是否批准该操作？请输入 approve/reject：").strip().lower()
+            if decision in {"approve", "reject"}:
+                break
 
-    reply_text = "".join(reply_parts).lstrip("\r\n")
-    if reply_text:
-        print(f"助手：{reply_text}")
+        if decision == "approve":
+            decisions.append({"type": "approve"})
+        else:
+            reason = input("请输入拒绝原因（可留空）：").strip()
+            item = {"type": "reject"}
+            if reason:
+                item["message"] = reason
+            decisions.append(item)
+
+    return decisions
 
 
 def invoke_agent_once(
@@ -91,30 +88,47 @@ def invoke_agent_once(
     thread_id: str,
     show_reasoning: bool = True,
 ) -> None:
+    config = {"configurable": {"thread_id": thread_id}}
     result = agent.invoke(
         {"messages": [{"role": "user", "content": user_input}]},
-        config={"configurable": {"thread_id": thread_id}},
+        config=config,
+        version="v2",
     )
 
-    last_msg = result["messages"][-1]
-    print(f"助手：{last_msg.content}")
+    while getattr(result, "interrupts", None):
+        interrupt_value = result.interrupts[0].value
+        decisions = _prompt_hitl_decisions(interrupt_value)
+        result = agent.invoke(
+            Command(resume={"decisions": decisions}),
+            config=config,
+            version="v2",
+        )
 
-    reasoning = getattr(last_msg, "additional_kwargs", {}).get("reasoning_content")
-    if show_reasoning and reasoning:
-        print(f"思考：{reasoning}")
+    result_value = result.value if hasattr(result, "value") else result
+    _print_last_message(result_value, show_reasoning=show_reasoning)
 
 
 def main():
     cfg = load_config()
-
     model = build_model(cfg)
 
     agent = create_master_agent(
         model=model,
-        tools=[],
-        subagents=[customer_query_agent, process_query_agent, tv_package_query_subagent],
+        tools=[build_manual_ticket_draft, submit_manual_ticket],
+        subagents=[
+            customer_query_agent,
+            process_query_agent,
+            tv_package_query_subagent,
+            sop_diagnosis_agent,
+        ],
         system_prompt=MASTER_AGENT_SYSTEM_PROMPT,
         memory_files=["memories/LTM.md"],
+        interrupt_on={
+            "submit_manual_ticket": {
+                "allowed_decisions": ["approve", "reject"],
+                "description": "提交人工工单前请核对工单标题、正文以及完整诊断记录附件。",
+            }
+        },
     )
 
     thread_id = str(uuid.uuid4())
@@ -135,11 +149,7 @@ def main():
             continue
 
         show_reasoning = bool(cfg.get("SHOW_REASONING", True))
-
-        if cfg.get("STREAM_OUTPUT", True):
-            stream_agent_response(agent, user_input, thread_id, show_reasoning=show_reasoning)
-        else:
-            invoke_agent_once(agent, user_input, thread_id, show_reasoning=show_reasoning)
+        invoke_agent_once(agent, user_input, thread_id, show_reasoning=show_reasoning)
 
 
 if __name__ == "__main__":

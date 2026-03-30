@@ -1,0 +1,29 @@
+[
+  {
+    "resource_code": "500135100000000013123839",
+    "change_records": []
+  },
+  {
+    "resource_code": "500135100000000013125835",
+    "change_records": [
+      {
+        "change_type": "asset_unbind",
+        "before_value": "A00002493300",
+        "after_value": "",
+        "change_time": "2026-03-26 09:30:00"
+      }
+    ]
+  },
+  {
+    "resource_code": "500135100000000013129999",
+    "change_records": [
+      {
+        "change_type": "logical_delete",
+        "before_value": "false",
+        "after_value": "true",
+        "change_time": "2026-03-26 09:45:00"
+      }
+    ]
+  }
+]
+

@@ -1,0 +1,13 @@
+[
+  {
+    "pms_project_code": "PMS202603260001",
+    "message_type": "INNER_ACCEPTANCE",
+    "receive_time": null
+  },
+  {
+    "pms_project_code": "PMS202603260002",
+    "message_type": "REUSE_INSTRUCTION",
+    "receive_time": "2026-03-26 10:01:00"
+  }
+]
+

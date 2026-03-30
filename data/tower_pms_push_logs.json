@@ -1,0 +1,16 @@
+[
+  {
+    "pms_project_code": "PMS202603260002",
+    "asset_code": "A00002493300",
+    "reuse_flow_started": true,
+    "pushed_to_resource_system": false,
+    "push_time": null
+  },
+  {
+    "pms_project_code": "PMS202603260003",
+    "asset_code": "A00002791718",
+    "reuse_flow_started": true,
+    "pushed_to_resource_system": true,
+    "push_time": "2026-03-26 10:00:00"
+  }
+]

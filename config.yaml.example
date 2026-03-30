@@ -13,4 +13,5 @@ SHOW_REASONING: true
 
 # 思考能力配置
 ENABLE_THINKING: true
+# 必须大于0
 THINKING_BUDGET: 4096

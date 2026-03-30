@@ -1,0 +1,30 @@
+[
+  {
+    "resource_code": "500135100000000013123839",
+    "asset_code": "A00002667891",
+    "resource_status": "在建",
+    "pms_project_code": "PMS202603260001",
+    "binding_status": "bound",
+    "is_deleted": false,
+    "visible_in_entry_page": true
+  },
+  {
+    "resource_code": "500135100000000013125835",
+    "asset_code": "A00002493300",
+    "resource_status": "在网",
+    "pms_project_code": "PMS202603260002",
+    "binding_status": "unbound",
+    "is_deleted": false,
+    "visible_in_entry_page": false
+  },
+  {
+    "resource_code": "500135100000000013129999",
+    "asset_code": "A00002791718",
+    "resource_status": "在网",
+    "pms_project_code": "PMS202603260003",
+    "binding_status": "bound",
+    "is_deleted": true,
+    "visible_in_entry_page": false
+  }
+]
+

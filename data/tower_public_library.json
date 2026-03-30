@@ -1,0 +1,17 @@
+[
+  {
+    "pms_project_code": "PMS202603260001",
+    "acceptance_status_flag": "INNER_ACCEPTANCE_PASSED",
+    "found_acceptance_status": true,
+    "forwarded_to_resource_system": false,
+    "forward_time": null
+  },
+  {
+    "pms_project_code": "PMS202603260004",
+    "acceptance_status_flag": "INNER_ACCEPTANCE_PASSED",
+    "found_acceptance_status": false,
+    "forwarded_to_resource_system": false,
+    "forward_time": null
+  }
+]
+

@@ -1,0 +1,47 @@
+[
+  {
+    "order_id": "ORD-BJ-HD-20260301001",
+    "station_id": "BJ-HD-5G-001",
+    "region": "北京",
+    "district": "海淀区",
+    "order_type": "设备扩容",
+    "device_type": "AAU",
+    "status": "待校验",
+    "amount": 2,
+    "create_time": "2026-03-01 10:00:00"
+  },
+  {
+    "order_id": "ORD-BJ-HD-20260302002",
+    "station_id": "BJ-HD-5G-002",
+    "region": "北京",
+    "district": "海淀区",
+    "order_type": "新建站点",
+    "device_type": "BBU",
+    "status": "已通过",
+    "amount": 1,
+    "create_time": "2026-03-02 14:30:00"
+  },
+  {
+    "order_id": "ORD-BJ-CY-20260305003",
+    "station_id": "BJ-CY-4G-001",
+    "region": "北京",
+    "district": "朝阳区",
+    "order_type": "电源改造",
+    "device_type": "电源",
+    "status": "待校验",
+    "amount": 1,
+    "create_time": "2026-03-05 09:15:00"
+  },
+  {
+    "order_id": "ORD-SH-PD-20260308004",
+    "station_id": "SH-PD-5G-001",
+    "region": "上海",
+    "district": "浦东新区",
+    "order_type": "设备扩容",
+    "device_type": "AAU",
+    "status": "已通过",
+    "amount": 3,
+    "create_time": "2026-03-08 11:20:00"
+  }
+]
+

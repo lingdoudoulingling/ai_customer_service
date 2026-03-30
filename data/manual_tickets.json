@@ -1,0 +1,57 @@
+[
+  {
+    "ticket_id": "TICKET-5B614F65",
+    "ticket_title": "测试工单",
+    "ticket_body": "这是测试正文",
+    "target_team": "资源系统支撑",
+    "urgency": "medium",
+    "submission_reason": "联调验证",
+    "diagnosis_record": "完整诊断记录: 测试",
+    "status": "submitted",
+    "submitted_at": "2026-03-29 16:04:54"
+  },
+  {
+    "ticket_id": "TICKET-5542A2AC",
+    "ticket_title": "铁塔资源诊断工单 - 资源状态同步异常，需人工介入排查。",
+    "ticket_body": "问题现象：项目已完成内验但资源系统里还是在建状态，状态不同步\n\n当前判断：资源状态同步异常，需人工介入排查。\n\n请支撑团队根据附带的完整诊断记录继续排查并处理。",
+    "target_team": "资源系统支撑",
+    "urgency": "medium",
+    "submission_reason": "用户确认提交人工工单处理资源状态同步问题",
+    "diagnosis_record": "资源编码500135100000000013123839状态同步问题诊断记录：\n\n问题概述：项目已完成内验但资源系统显示在建\n\n诊断过程：\n1. 资源系统查询：资源编码500135100000000013123839状态显示\"在建\"，绑定状态正常\n2. 公共库查询：项目状态为INNER_ACCEPTANCE_PASSED（内验通过），但forwarded_to_resource_system=false\n3. 资源系统接收日志：未收到INNER_ACCEPTANCE_PASSED消息（received=false）\n4. 资源变更履历：无任何变更记录\n5. PMS推送日志：未发起利旧流程，未推送至资源系统\n\n根本原因：公共库验证通过后未触发向资源系统的状态同步机制\n\n建议动作：检查公共库到资源系统的状态同步机制，修复数据流转问题",
+    "status": "submitted",
+    "submitted_at": "2026-03-29 23:26:37"
+  },
+  {
+    "ticket_id": "TICKET-5EDF94BA",
+    "ticket_title": "铁塔资源诊断工单 - 资源状态同步异常，需人工介入排查。",
+    "ticket_body": "问题现象：项目已经内验完成，但资源系统里资源编码500135100000000013123839仍显示在建状态\n\n当前判断：资源状态同步异常，需人工介入排查。\n\n请支撑团队根据附带的完整诊断记录继续排查并处理。",
+    "target_team": "资源系统支撑",
+    "urgency": "medium",
+    "submission_reason": "诊断已完成，建议人工处理。",
+    "diagnosis_record": "资源编码500135100000000013123839状态同步问题诊断记录：\n\n项目PMS202603260001已通过内验（INNER_ACCEPTANCE_PASSED），但资源系统显示仍为\"在建\"状态。\n\n核心问题：PMS系统内验通过后，状态变更信息未成功同步到资源系统。\n- 资源编码：500135100000000013123839\n- 资产编码：A00002667891  \n- PMS内验状态：INNER_ACCEPTANCE_PASSED\n- 资源系统接收状态：received: false, matched_records_count: 0\n- PMS推送状态：reuse_flow_started: false, pushed_to_resource_system: false\n\n需要PMS技术团队调查内验状态推送流程异常原因，确保状态同步机制的正常运行。",
+    "status": "submitted",
+    "submitted_at": "2026-03-29 23:40:38"
+  },
+  {
+    "ticket_id": "TICKET-CEA7C1F4",
+    "ticket_title": "铁塔资源诊断工单 - 资源状态同步异常，需人工介入排查。",
+    "ticket_body": "问题现象：用户反馈资源状态异常。\n\n当前判断：资源状态同步异常，需人工介入排查。\n\n请支撑团队根据附带的完整诊断记录继续排查并处理。",
+    "target_team": "资源系统支撑",
+    "urgency": "medium",
+    "submission_reason": "诊断已完成，建议人工处理。",
+    "diagnosis_record": "status: ABNORMAL, scene_id: RESOURCE_STATUS_MISMATCH, summary: 项目PMS202603260001已完成内验但资源系统仍显示为\"在建\"状态，状态同步异常。root_cause: PMS项目内验完成后，公共库检测到内验完成状态为INNER_ACCEPTANCE_PASSED，但未向资源系统转发完成消息，资源系统接收日志显示未收到POST_ACCEPTANCE_COMPLETE报文，导致资源状态更新失败。confidence: HIGH, need_human_review: true, suggest_ticket: true。关键证据: 资源系统状态: 在建, PMS推送状态: 未推送未发起利旧流程, 公共库内验状态: INNER_ACCEPTANCE_PASSED（内验完成）, 公共库转发状态: false（未转发）, 资源系统接收日志: false（未收到POST_ACCEPTANCE_COMPLETE报文）",
+    "status": "submitted",
+    "submitted_at": "2026-03-29 23:43:59"
+  },
+  {
+    "ticket_id": "TICKET-6B3A44AD",
+    "ticket_title": "铁塔资源诊断工单 - 资源状态同步异常，需人工介入排查。",
+    "ticket_body": "问题现象：用户反馈资源状态异常。\n\n当前判断：资源状态同步异常，需人工介入排查。\n\n请支撑团队根据附带的完整诊断记录继续排查并处理。",
+    "target_team": "资源系统支撑",
+    "urgency": "medium",
+    "submission_reason": "诊断已完成，建议人工处理。",
+    "diagnosis_record": "资源编码500135100000000013123839已完成内验但资源系统状态异常诊断记录：\n- 问题现象：资源已完成内验但资源系统仍显示\"在建\"状态\n- 关键证据：\n  * 资源代码：500135100000000013123839\n  * 公共库状态：INNER_ACCEPTANCE_PASSED（已通过内验）但forwarded_to_resource_system=false（未转发）\n  * 资源系统状态：在建\n  * 接收日志：资源系统未收到INNER_ACCEPTANCE类型报文，matched_records_count=0\n- 根本原因：公共库内验完成后，内验报文（INNER_ACCEPTANCE）未成功推送到资源系统\n- 影响范围：资源状态数据不一致，影响业务进展\n- 建议处理：检查公共库到资源系统的报文推送通道，验证网络连接和传输状态",
+    "status": "submitted",
+    "submitted_at": "2026-03-30 16:14:07"
+  }
+]
