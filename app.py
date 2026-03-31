@@ -47,11 +47,10 @@ def build_model(cfg: dict) -> ChatSiliconFlow:
 
 def _print_last_message(result_value: dict, show_reasoning: bool = True) -> None:
     last_msg = result_value["messages"][-1]
-    print(f"助手：{last_msg.content}")
-
     reasoning = getattr(last_msg, "additional_kwargs", {}).get("reasoning_content")
     if show_reasoning and reasoning:
         print(f"思考：{reasoning}")
+    print(f"助手：{last_msg.content}")
 
 
 def _prompt_hitl_decisions(interrupt_value: dict) -> list[dict]:
