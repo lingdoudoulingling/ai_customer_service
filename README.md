@@ -1,7 +1,16 @@
 基于deepagents的智能客服
 
-启动方式：
+## 安装依赖
+
+```bash
+pip install -r requirements.txt
+```
+
+## 启动方式
+
+```bash
 python app.py
+```
 
 ## 测试用例
 
@@ -66,14 +75,14 @@ python app.py
   - 诊断记录包含之前的完整分析
 
 ## todo-list
-1.场景意图识别
-2.槽位填充
-3.设计系统查询
-4.支持langfuse
-5.支持skills
-6.支持jinjia SOP流程模板
-7.支持记忆管理
-8.美观UI前端
-9.前端支持流式输出
-10.前端支持显示todo-list
+
+- [x] 场景意图识别功能（当前通过子智能体description隐式识别）
+- [x] 槽位填充（当前由主智能体进行槽位填充）
+- [ ] 支持langfuse
+- [ ] 支持skills
+- [ ] 支持jinjia SOP流程模板
+- [x] 支持记忆管理（MemorySaver + LTM.md）
+- [ ] 美观UI前端
+- [ ] 前端支持流式输出
+- [ ] 前端支持显示todo-list
 

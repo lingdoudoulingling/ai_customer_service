@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from app import build_model, load_config
+from app import MASTER_AGENT_SKILLS, build_model, load_config
 from langgraph.types import Command
 from master_agent import create_master_agent
 from prompts.master_agent_prompt import MASTER_AGENT_SYSTEM_PROMPT
@@ -29,6 +29,7 @@ def main() -> None:
         ],
         system_prompt=MASTER_AGENT_SYSTEM_PROMPT,
         memory_files=["memories/LTM.md"],
+        skills=MASTER_AGENT_SKILLS,
         interrupt_on={
             "submit_manual_ticket": {
                 "allowed_decisions": ["approve", "reject"],

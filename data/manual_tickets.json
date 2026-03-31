@@ -64,5 +64,16 @@
     "diagnosis_record": "资产编码A00002493300的利旧资源查找异常问题诊断记录：\n- 问题现象：无法在资源系统中找到利旧资产A00002493300对应的资源\n- 关键参数：asset_code=A00002493300, resource_code=500135100000000013125835, pms_project_code=PMS202603260002\n- 关键证据：\n  * 资源系统中资产状态正常但在网，绑定状态为unbound\n  * 资源变更履历显示在2026-03-26 09:30:00执行了asset_unbind操作\n  * PMS系统有发起利旧流程记录(reuse_flow_started=true)，但pushed_to_resource_system=false\n  * 公共库未验也未转发到资源系统\n- 根本原因：PMS系统虽有发起利旧流程的记录，但未成功将报文推送到资源系统\n- 影响范围：利旧资源无法在其他项目中正常流转使用\n- 建议处理：检查PMS系统向资源系统的推送接口服务状态，重新发起利旧流程推送",
     "status": "submitted",
     "submitted_at": "2026-03-30 17:01:51"
+  },
+  {
+    "ticket_id": "TICKET-AC3ED3CC",
+    "ticket_title": "铁塔资源诊断工单 - 资源状态同步异常，需人工介入排查",
+    "ticket_body": "问题现象：用户反馈资源状态异常。\n\n当前判断：资源状态同步异常，需人工介入排查。\n\n请支撑团队根据附带的完整诊断记录继续排查并处理。",
+    "target_team": "资源系统支撑",
+    "urgency": "medium",
+    "submission_reason": "诊断已完成，建议人工处理",
+    "diagnosis_record": "资产编码A00002493300存在利旧资源查询异常。诊断显示该资产对应资源编码500135100000000013125835，资源状态为在网但绑定状态为已解绑(unbound)。问题根源：PMS系统已发起利旧流程(PMS202603260002)，但未成功推送至资源系统(push_to_resource_system=false)，导致资源被解绑后未重新绑定，形成\"资源孤儿\"状态。需要调查PMS推送机制并修复资源绑定状态。",
+    "status": "submitted",
+    "submitted_at": "2026-03-31 14:25:53"
   }
 ]

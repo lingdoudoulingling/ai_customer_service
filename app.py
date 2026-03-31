@@ -14,6 +14,8 @@ from subagents.sop_diagnosis_agent import sop_diagnosis_agent
 from subagents.tv_package_query_subagent import tv_package_query_subagent
 from tools.ticket_tools import build_manual_ticket_draft, submit_manual_ticket
 
+MASTER_AGENT_SKILLS = ["skills/diagnosis-workflow"]
+
 
 def load_config(config_path: str = "config.yaml") -> dict:
     path = Path(config_path)
@@ -123,6 +125,7 @@ def main():
         ],
         system_prompt=MASTER_AGENT_SYSTEM_PROMPT,
         memory_files=["memories/LTM.md"],
+        skills=MASTER_AGENT_SKILLS,
         interrupt_on={
             "submit_manual_ticket": {
                 "allowed_decisions": ["approve", "reject"],

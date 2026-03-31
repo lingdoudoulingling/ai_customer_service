@@ -3,7 +3,7 @@ from pathlib import Path
 
 from langgraph.types import Command
 
-from app import build_model, load_config
+from app import MASTER_AGENT_SKILLS, build_model, load_config
 from master_agent import create_master_agent
 from prompts.master_agent_prompt import MASTER_AGENT_SYSTEM_PROMPT
 from subagents.customer_query_agent import customer_query_agent
@@ -33,6 +33,7 @@ def run_case(label: str, enable_thinking: bool, thinking_budget: int) -> None:
         ],
         system_prompt=MASTER_AGENT_SYSTEM_PROMPT,
         memory_files=["memories/LTM.md"],
+        skills=MASTER_AGENT_SKILLS,
         interrupt_on={
             "submit_manual_ticket": {
                 "allowed_decisions": ["approve", "reject"],

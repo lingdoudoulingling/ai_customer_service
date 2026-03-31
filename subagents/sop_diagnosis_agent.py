@@ -14,7 +14,7 @@ from tools.tieta_tools import (
 
 sop_diagnosis_agent: Dict[str, Any] = {
     "name": "sop-diagnosis",
-    "description": "铁塔资源问题轻量诊断专家。适用于资源在建异常、利旧资源查不到等场景。",
+    "description": "铁塔客户问题诊断专家。适用于资源在建异常、利旧资源查不到等场景。",
     "system_prompt": SOP_DIAGNOSIS_SYSTEM_PROMPT,
     "tools": [
         query_resource_system,

@@ -17,6 +17,7 @@ def create_master_agent(
     subagents: List[Dict[str, Any]],
     system_prompt: str,
     memory_files: List[str],
+    skills: List[str] | None = None,
     interrupt_on: Dict[str, Any] | None = None,
 ) -> Any:
     """创建带 memory 和可选 HITL 审批配置的 deep agent。"""
@@ -27,6 +28,7 @@ def create_master_agent(
         system_prompt=system_prompt,
         checkpointer=MemorySaver(),
         memory=memory_files,
+        skills=skills,
         interrupt_on=interrupt_on,
     )
 
