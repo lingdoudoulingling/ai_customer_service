@@ -274,3 +274,50 @@ exit
 - [ ] 美观UI前端
 - [ ] 前端支持流式输出
 - [ ] 前端支持显示todo-list
+
+## 程序 Mermaid 流程图
+
+```mermaid
+flowchart TD
+    A[启动 python app.py] --> B[main]
+    B --> C[load_config]
+    C --> D[build_model]
+    D --> E[create_context_service]
+    E --> F[open_postgres_checkpointer]
+    F --> G[build_master_agent]
+    G --> H[prompt_user_id]
+    H --> I[prompt_thread_id]
+    I --> J{用户输入 exit?}
+    J -- 否 --> K[invoke_agent_once]
+    J -- 是 --> Z[退出程序]
+
+    subgraph R1[单轮调用主流程]
+        K --> K1[build_checkpoint_config]
+        K1 --> K2[context_service.build_runtime_context]
+        K2 --> K3[get_short_term_context]
+        K2 --> K4[long_term_store.search]
+        K3 --> K5[compress_context]
+        K4 --> K5
+        K5 --> K6[build_agent_messages]
+        K6 --> K7[agent.invoke]
+        K7 --> K8{是否触发 HITL?}
+        K8 -- 是 --> K9[_prompt_hitl_decisions]
+        K9 --> K10[Command resume]
+        K10 --> K7
+        K8 -- 否 --> K11[write_memory_after_turn]
+        K11 --> K12[extract_long_term_memory_items]
+        K12 --> K13[long_term_store.write_memories]
+        K13 --> K14[_print_last_message]
+    end
+
+    K14 --> J
+
+    subgraph R2[记忆分层]
+        S1[短期记忆<br/>Postgres checkpoint<br/>按 thread_id 隔离]
+        S2[长期记忆<br/>Mem0 + Qdrant<br/>按 user_id 隔离]
+    end
+
+    K3 -. 读取 .-> S1
+    K13 -. 写入 .-> S2
+    K4 -. 检索 .-> S2
+```
