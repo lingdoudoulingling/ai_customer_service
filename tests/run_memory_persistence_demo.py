@@ -2,54 +2,51 @@ from app import build_master_agent, build_model, create_context_service, invoke_
 from memory.short_term import open_postgres_checkpointer
 
 
-def run_case(label: str, enable_thinking: bool, thinking_budget: int) -> None:
+def main() -> None:
     cfg = load_config()
-    cfg["ENABLE_THINKING"] = enable_thinking
-    cfg["THINKING_BUDGET"] = thinking_budget
     model = build_model(cfg)
     context_service = create_context_service(cfg)
     checkpoint_ns = str(cfg["CHECKPOINT_NAMESPACE"])
+    user_id = "memory-demo-user"
+
+    write_text = (
+        "请记住：我是平台创新中心的张三，负责北京地区铁塔资源问题。"
+        "以后回答请先给结论，再给依据。"
+    )
+    read_text = "你还记得我负责哪个区域吗？请按我的偏好回答。"
 
     with open_postgres_checkpointer(
         postgres_url=cfg["POSTGRES_URL"],
         auto_setup=bool(cfg.get("POSTGRES_AUTO_SETUP", True)),
     ) as checkpointer:
         agent = build_master_agent(model, checkpointer)
-        user_id = f"compare-{label.lower()}"
-        thread_id = f"compare-{label.lower()}"
-
-        print(f"\n===== {label} =====", flush=True)
-        print(
-            f"CONFIG: ENABLE_THINKING={enable_thinking} THINKING_BUDGET={thinking_budget}",
-            flush=True,
-        )
-        round1 = (
-            "查一下资源编码 00135100000000013123839，"
-            "项目已经内验了但资源系统里还是在建。"
-        )
-        print("ROUND1 USER:", round1, flush=True)
         invoke_agent_once(
             agent=agent,
             context_service=context_service,
             user_id=user_id,
-            user_input=round1,
-            thread_id=thread_id,
+            user_input=write_text,
+            thread_id="memory-write-thread",
             checkpoint_ns=checkpoint_ns,
             show_reasoning=False,
         )
 
-        round2 = "我确认提交人工工单。"
-        print("ROUND2 USER:", round2, flush=True)
+    print("=== restart app ===", flush=True)
+
+    with open_postgres_checkpointer(
+        postgres_url=cfg["POSTGRES_URL"],
+        auto_setup=bool(cfg.get("POSTGRES_AUTO_SETUP", True)),
+    ) as checkpointer:
+        agent = build_master_agent(model, checkpointer)
         invoke_agent_once(
             agent=agent,
             context_service=context_service,
             user_id=user_id,
-            user_input=round2,
-            thread_id=thread_id,
+            user_input=read_text,
+            thread_id="memory-read-thread",
             checkpoint_ns=checkpoint_ns,
             show_reasoning=False,
         )
 
 
 if __name__ == "__main__":
-    run_case("LIGHT", enable_thinking=False, thinking_budget=1)
+    main()

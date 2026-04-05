@@ -2,4 +2,7 @@ deepagents==0.4.9
 langchain-core==1.2.18
 langchain-siliconflow==1.0.0
 langgraph==1.1.0
+langgraph-checkpoint-postgres
+psycopg[binary,pool]
+mem0ai
 PyYAML==6.0.3

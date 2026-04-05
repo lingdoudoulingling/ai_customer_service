@@ -19,6 +19,7 @@
 - Mermaid 适用于流程图、系统架构图、状态转换图、类关系图、数据分析图表等
 - Python 代码中如需避免终端中文输出乱码，可使用:
   `sys.stdout.reconfigure(encoding='utf-8')`
+- README.md记录整个项目的相关文档，禁止为了方便就随意删除原有章节，只能在必要时添加新章节或修改章节内容
 
 ## Coding Style
 

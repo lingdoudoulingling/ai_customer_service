@@ -1,15 +1,16 @@
 import json
 from pathlib import Path
 
-from app import MASTER_AGENT_SKILLS, build_model, load_config
 from langgraph.types import Command
-from master_agent import create_master_agent
-from prompts.master_agent_prompt import MASTER_AGENT_SYSTEM_PROMPT
-from subagents.customer_query_agent import customer_query_agent
-from subagents.process_query_agent import process_query_agent
-from subagents.sop_diagnosis_agent import sop_diagnosis_agent
-from subagents.tv_package_query_subagent import tv_package_query_subagent
-from tools.ticket_tools import build_manual_ticket_draft, submit_manual_ticket
+
+from app import (
+    build_master_agent,
+    build_model,
+    create_context_service,
+    invoke_agent_once,
+    load_config,
+)
+from memory.short_term import build_checkpoint_config, open_postgres_checkpointer
 
 
 def main() -> None:
@@ -18,64 +19,59 @@ def main() -> None:
 
     cfg = load_config()
     model = build_model(cfg)
-    agent = create_master_agent(
-        model=model,
-        tools=[build_manual_ticket_draft, submit_manual_ticket],
-        subagents=[
-            customer_query_agent,
-            process_query_agent,
-            tv_package_query_subagent,
-            sop_diagnosis_agent,
-        ],
-        system_prompt=MASTER_AGENT_SYSTEM_PROMPT,
-        memory_files=["memories/LTM.md"],
-        skills=MASTER_AGENT_SKILLS,
-        interrupt_on={
-            "submit_manual_ticket": {
-                "allowed_decisions": ["approve", "reject"],
-                "description": "提交人工工单前请核对工单标题、正文以及完整诊断记录附件。",
-            }
-        },
-    )
-    config = {"configurable": {"thread_id": "demo-two-stage-ticket-flow"}}
+    context_service = create_context_service(cfg)
+    checkpoint_ns = str(cfg["CHECKPOINT_NAMESPACE"])
 
-    round1 = "查一下资源编码500135100000000013123839，项目已经内验了但资源系统里还是在建。"
-    print("ROUND1 USER:", round1, flush=True)
-    result1 = agent.invoke(
-        {"messages": [{"role": "user", "content": round1}]},
-        config=config,
-        version="v2",
-    )
-    value1 = result1.value if hasattr(result1, "value") else result1
-    msg1 = value1["messages"][-1].content
-    print("ROUND1 FINAL_MESSAGE:", flush=True)
-    print(msg1, flush=True)
-    print("ROUND1_INTERRUPTS:", bool(getattr(result1, "interrupts", None)), flush=True)
+    with open_postgres_checkpointer(
+        postgres_url=cfg["POSTGRES_URL"],
+        auto_setup=bool(cfg.get("POSTGRES_AUTO_SETUP", True)),
+    ) as checkpointer:
+        agent = build_master_agent(model, checkpointer)
+        user_id = "demo-user"
+        thread_id = "demo-two-stage-ticket-flow"
 
-    round2 = "我确认提交人工工单。"
-    print("ROUND2 USER:", round2, flush=True)
-    result2 = agent.invoke(
-        {"messages": [{"role": "user", "content": round2}]},
-        config=config,
-        version="v2",
-    )
-    print("ROUND2_INTERRUPTS:", bool(getattr(result2, "interrupts", None)), flush=True)
-    if getattr(result2, "interrupts", None):
-        print(
-            "ROUND2_INTERRUPT_VALUE:",
-            json.dumps(result2.interrupts[0].value, ensure_ascii=False, indent=2),
-            flush=True,
+        round1 = (
+            "查一下资源编码 00135100000000013123839，"
+            "项目已经内验了但资源系统里还是在建。"
         )
+        print("ROUND1 USER:", round1, flush=True)
+        invoke_agent_once(
+            agent=agent,
+            context_service=context_service,
+            user_id=user_id,
+            user_input=round1,
+            thread_id=thread_id,
+            checkpoint_ns=checkpoint_ns,
+            show_reasoning=False,
+        )
+
+        round2 = "我确认提交人工工单。"
+        print("ROUND2 USER:", round2, flush=True)
         result2 = agent.invoke(
-            Command(resume={"decisions": [{"type": "approve"}]}),
-            config=config,
+            {
+                "messages": context_service.build_agent_messages(
+                    context_service.build_runtime_context(agent, user_id, thread_id, round2),
+                    round2,
+                )
+            },
+            config=build_checkpoint_config(thread_id, checkpoint_ns),
             version="v2",
         )
-
-    value2 = result2.value if hasattr(result2, "value") else result2
-    msg2 = value2["messages"][-1].content
-    print("ROUND2 FINAL_MESSAGE:", flush=True)
-    print(msg2, flush=True)
+        print("ROUND2_INTERRUPTS:", bool(getattr(result2, "interrupts", None)), flush=True)
+        if getattr(result2, "interrupts", None):
+            print(
+                "ROUND2_INTERRUPT_VALUE:",
+                json.dumps(result2.interrupts[0].value, ensure_ascii=False, indent=2),
+                flush=True,
+            )
+            result2 = agent.invoke(
+                Command(resume={"decisions": [{"type": "approve"}]}),
+                config=build_checkpoint_config(thread_id, checkpoint_ns),
+                version="v2",
+            )
+        value2 = result2.value if hasattr(result2, "value") else result2
+        print("ROUND2 FINAL_MESSAGE:", flush=True)
+        print(value2["messages"][-1].content, flush=True)
 
     after_log = log_path.read_text(encoding="utf-8") if log_path.exists() else ""
     new_log = after_log[len(before_log) :]
